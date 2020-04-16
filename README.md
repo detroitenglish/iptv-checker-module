@@ -6,7 +6,7 @@ A module for checking channel links in IPTV playlists parsed by [iptv-playlist-p
 
 This tool requires the `ffmpeg` library, so you need to have it installed on your device. You can find the right [installer for your system here](https://www.ffmpeg.org/download.html).
 
-## Usage
+## Example
 
 ```javascript
 const iptvChecker = require('iptv-checker-module')
