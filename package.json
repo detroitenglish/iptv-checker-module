@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Check the status of IPTV channels from playlists parsed by iptv-playlist-parser",
   "main": "src/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
     "lint": "npx eslint ./src/**/*.js ./test/*.js",
     "test": "npx ava"
