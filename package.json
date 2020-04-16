@@ -1,0 +1,52 @@
+{
+  "name": "iptv-checker-module",
+  "version": "0.0.0",
+  "description": "Check the status of IPTV channels from playlists parsed by iptv-playlist-parser",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "npx eslint ./src/**/*.js ./test/*.js",
+    "test": "npx ava"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/detroitenglish/iptv-checker-module.git"
+  },
+  "author": "Dave Willenberg <dave@detroit-english.de>",
+  "license": "MIT",
+  "keywords": [
+    "iptv",
+    "m3u",
+    "m3u8",
+    "checker",
+    "playlists"
+  ],
+  "dependencies": {
+    "colors": "^1.4.0",
+    "command-exists": "^1.2.8",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "ava": "^3.6.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "iptv-playlist-parser": "^0.4.0",
+    "prettier": "^2.0.4"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "ava": {
+    "failFast": true,
+    "concurrency": 3,
+    "timeout": "1m",
+    "files": [
+      "test/*.test.js"
+    ]
+  }
+}

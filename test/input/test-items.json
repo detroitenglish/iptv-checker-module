@@ -1,0 +1,164 @@
+[
+  {
+    "name": "CGTN Documentary",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Chinese",
+      "country": "CN",
+      "logo": "https://i.imgur.com/TSG6WBy.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "http://210.210.155.35/session/77d6180e-7b7b-11e8-a194-c81f66f89318/qwr9ew/s/s20/01.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Chinese\" tvg-logo=\"https://i.imgur.com/TSG6WBy.png\" tvg-country=\"CN\" tvg-url=\"\" group-title=\"Documentary\",CGTN Documentary\nhttp://210.210.155.35/session/77d6180e-7b7b-11e8-a194-c81f66f89318/qwr9ew/s/s20/01.m3u8",
+    "active": true,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "CGTN Documentary",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Chinese",
+      "country": "CN",
+      "logo": "https://i.imgur.com/TSG6WBy.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "http://bit.ly/2D1FvME",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Chinese\" tvg-logo=\"https://i.imgur.com/TSG6WBy.png\" tvg-country=\"CN\" tvg-url=\"\" group-title=\"Documentary\",CGTN Documentary\nhttp://bit.ly/2D1FvME",
+    "active": true,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "IRIB OFOGH",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Persian",
+      "country": "IR",
+      "logo": "https://i.imgur.com/7fh4LwG.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "https://bozztv.com/36bay2/gin/giniko_iribofogh_900kb_36bay2/tracks-v1a1/mono.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Persian\" tvg-logo=\"https://i.imgur.com/7fh4LwG.png\" tvg-country=\"IR\" tvg-url=\"\" group-title=\"Documentary\",IRIB OFOGH\nhttps://bozztv.com/36bay2/gin/giniko_iribofogh_900kb_36bay2/tracks-v1a1/mono.m3u8",
+    "active": true,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "Rotana Classic",
+    "tvg": {
+      "id": "Rotana Classic ARB",
+      "name": "Rotana Classic ARB",
+      "language": "Arabic",
+      "country": "SA",
+      "logo": "https://i.imgur.com/bHz4QYC.png",
+      "url": "http://195.154.221.171/epg/guidearab.xml.gz"
+    },
+    "group": {
+      "title": "Classic"
+    },
+    "url": "http://livecdnh3.tvanywhere.ae/hls/rotclassic/04.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"Rotana Classic ARB\" tvg-name=\"Rotana Classic ARB\" tvg-language=\"Arabic\" tvg-logo=\"https://i.imgur.com/bHz4QYC.png\" tvg-country=\"SA\" tvg-url=\"http://195.154.221.171/epg/guidearab.xml.gz\" group-title=\"Classic\",Rotana Classic\nhttp://livecdnh3.tvanywhere.ae/hls/rotclassic/04.m3u8",
+    "active": false,
+    "src": "https://iptv-org.github.io/iptv/categories/classic.m3u"
+  },
+  {
+    "name": "CGTN Documentary",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Chinese",
+      "country": "CN",
+      "logo": "https://i.imgur.com/TSG6WBy.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "https://livedoc.cgtn.com/1000d/prog_index.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Chinese\" tvg-logo=\"https://i.imgur.com/TSG6WBy.png\" tvg-country=\"CN\" tvg-url=\"\" group-title=\"Documentary\",CGTN Documentary\nhttps://livedoc.cgtn.com/1000d/prog_index.m3u8",
+    "active": false,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "CGTN Documentary",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Chinese",
+      "country": "CN",
+      "logo": "https://i.imgur.com/TSG6WBy.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "https://news.cgtn.com/resource/live/document/cgtn-doc.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Chinese\" tvg-logo=\"https://i.imgur.com/TSG6WBy.png\" tvg-country=\"CN\" tvg-url=\"\" group-title=\"Documentary\",CGTN Documentary\nhttps://news.cgtn.com/resource/live/document/cgtn-doc.m3u8",
+    "active": true,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "DocuBox HD",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "English",
+      "country": "US",
+      "logo": "https://i.imgur.com/rnQMXRm.jpg",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "http://livecdnh3.tvanywhere.ae/hls/docubox/04.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"English\" tvg-logo=\"https://i.imgur.com/rnQMXRm.jpg\" tvg-country=\"US\" tvg-url=\"\" group-title=\"Documentary\",DocuBox HD\nhttp://livecdnh3.tvanywhere.ae/hls/docubox/04.m3u8",
+    "active": false,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "IRIB OFOGH",
+    "tvg": {
+      "id": "",
+      "name": "",
+      "language": "Persian",
+      "country": "IR",
+      "logo": "https://i.imgur.com/7fh4LwG.png",
+      "url": ""
+    },
+    "group": {
+      "title": "Documentary"
+    },
+    "url": "https://bozztv.com/36bay2/gin/giniko_iribofogh_900kb_36bay2/tracks-v1a1/mono.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"\" tvg-name=\"\" tvg-language=\"Persian\" tvg-logo=\"https://i.imgur.com/7fh4LwG.png\" tvg-country=\"IR\" tvg-url=\"\" group-title=\"Documentary\",IRIB OFOGH\nhttps://bozztv.com/36bay2/gin/giniko_iribofogh_900kb_36bay2/tracks-v1a1/mono.m3u8",
+    "active": true,
+    "src": "https://iptv-org.github.io/iptv/categories/documentary.m3u"
+  },
+  {
+    "name": "Rotana Classic",
+    "tvg": {
+      "id": "Rotana Classic ARB",
+      "name": "Rotana Classic ARB",
+      "language": "Arabic",
+      "country": "SA",
+      "logo": "https://i.imgur.com/bHz4QYC.png",
+      "url": "http://195.154.221.171/epg/guidearab.xml.gz"
+    },
+    "group": {
+      "title": "Classic"
+    },
+    "url": "http://livecdnh3.tvanywhere.ae/hls/rotclassic/04.m3u8",
+    "raw": "#EXTINF:-1 tvg-id=\"Rotana Classic ARB\" tvg-name=\"Rotana Classic ARB\" tvg-language=\"Arabic\" tvg-logo=\"https://i.imgur.com/bHz4QYC.png\" tvg-country=\"SA\" tvg-url=\"http://195.154.221.171/epg/guidearab.xml.gz\" group-title=\"Classic\",Rotana Classic\nhttp://livecdnh3.tvanywhere.ae/hls/rotclassic/04.m3u8",
+    "active": false,
+    "src": "https://iptv-org.github.io/iptv/categories/classic.m3u"
+  }
+]
