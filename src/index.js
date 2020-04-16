@@ -2,6 +2,7 @@ require('colors')
 const helper = require('./helper')
 const { isWebUri } = require('valid-url')
 const procs = require('os').cpus().length - 1
+const commandExists = require('command-exists')
 
 let debugLogger
 
@@ -20,6 +21,11 @@ const defaultConfig = {
 }
 
 module.exports = async function (playlist = [], opts = {}) {
+  await commandExists(`ffprobe`).catch(() => {
+    throw new Error(
+      `Executable "ffprobe" not found. Have you installed "ffmpeg"?`
+    )
+  })
   const config = { ...defaultConfig, ...opts }
 
   if (!Array.isArray(playlist) && Reflect.has(playlist, `items`)) {

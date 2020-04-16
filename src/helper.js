@@ -1,13 +1,5 @@
 const util = require('util')
 const execAsync = util.promisify(require('child_process').exec)
-const commandExists = require('command-exists')
-
-commandExists(`ffprobe`).catch(() => {
-  console.error(
-    `Executable "ffprobe" not found. Have you installed "ffmpeg"?`.red
-  )
-  process.exit(1)
-})
 
 let cache = new Set()
 
