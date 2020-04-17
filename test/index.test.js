@@ -1,14 +1,15 @@
 const { readFileSync } = require('fs')
 const test = require('ava')
-const { parse } = require('iptv-playlist-parser')
 const iptvChecker = require('./../src/index.js')
-const testItems = require('./input/test-items.json')
-const playlistFile = readFileSync(`${__dirname}/input/dummy.m3u`, {
+
+const playlistPath = `${__dirname}/input/dummy.m3u`
+
+const playlistFile = readFileSync(playlistPath, {
   encoding: 'utf8',
 })
 
-function resultTester(results) {
-  return results.every(item => {
+function resultTester(result) {
+  return result.items.every(item => {
     return (
       Reflect.has(item, `status`) &&
       Reflect.has(item.status, `ok`) &&
@@ -18,14 +19,35 @@ function resultTester(results) {
   })
 }
 
-test.serial(`Should process an array of playlist items`, async t => {
-  const results = await iptvChecker(testItems, { timeout: 2e3 })
+test.serial(`Should process a playlist URL`, async t => {
+  const url = 'https://iptv-org.github.io/iptv/categories/classic.m3u'
+  const results = await iptvChecker(url, { timeout: 2e3, parallel: 1 })
+
   t.true(resultTester(results))
 })
 
-test.serial(`Should process a parsed playlist`, async t => {
-  const playlist = parse(playlistFile)
-  const results = await iptvChecker(playlist, { timeout: 2e3 })
+test.serial(`Should process a playlist file path`, async t => {
+  const results = await iptvChecker(playlistPath, { timeout: 2e3, parallel: 1 })
 
   t.true(resultTester(results))
+})
+
+test.serial(`Should process a playlist Buffer`, async t => {
+  const playlistBuffer = Buffer.from(playlistFile)
+  const results = await iptvChecker(playlistBuffer, {
+    timeout: 2e3,
+    parallel: 1,
+  })
+
+  t.true(resultTester(results))
+})
+
+test.serial(`Should throw with invalid input`, async t => {
+  await t.throwsAsync(() =>
+    iptvChecker(1, {
+      timeout: 2e3,
+      parallel: 1,
+    })
+  ),
+    { instanceOf: TypeError }
 })
