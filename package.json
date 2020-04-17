@@ -1,6 +1,6 @@
 {
   "name": "iptv-checker-module",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Check the status of IPTV channels from playlists parsed by iptv-playlist-parser",
   "main": "src/index.js",
   "files": [
@@ -27,8 +27,10 @@
     "playlists"
   ],
   "dependencies": {
+    "axios": "^0.19.2",
     "colors": "^1.4.0",
     "command-exists": "^1.2.8",
+    "iptv-playlist-parser": "^0.4.0",
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
@@ -38,7 +40,6 @@
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "iptv-playlist-parser": "^0.4.0",
     "prettier": "^2.0.4"
   },
   "engines": {
@@ -46,7 +47,7 @@
   },
   "ava": {
     "failFast": true,
-    "concurrency": 3,
+    "concurrency": 2,
     "timeout": "1m",
     "files": [
       "test/*.test.js"
