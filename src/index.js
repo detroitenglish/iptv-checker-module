@@ -20,17 +20,16 @@ const defaultConfig = {
   parallel: procs || 1,
 }
 
-module.exports = async function (playlist = [], opts = {}) {
+module.exports = async function (input, opts = {}) {
   await commandExists(`ffprobe`).catch(() => {
     throw new Error(
       `Executable "ffprobe" not found. Have you installed "ffmpeg"?`
     )
   })
-  const config = { ...defaultConfig, ...opts }
 
-  if (!Array.isArray(playlist) && Reflect.has(playlist, `items`)) {
-    playlist = playlist.items
-  }
+  const playlist = await helper.parsePlaylist(input)
+
+  const config = { ...defaultConfig, ...opts }
 
   debugLogger = helper.debugLogger(config)
 
@@ -40,7 +39,7 @@ module.exports = async function (playlist = [], opts = {}) {
 
   const duplicates = []
 
-  const items = playlist
+  const items = playlist.items
     .filter(item => isWebUri(item.url))
     .map(item => {
       if (helper.checkCache(item)) {
@@ -91,5 +90,7 @@ module.exports = async function (playlist = [], opts = {}) {
     }
   }
 
-  return results
+  playlist.items = results
+
+  return playlist
 }

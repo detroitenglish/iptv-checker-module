@@ -1,5 +1,41 @@
+const Axios = require('axios')
 const util = require('util')
+const { parse } = require('iptv-playlist-parser')
+const { isWebUri } = require('valid-url')
+const { existsSync, readFile } = require('fs')
+const { isAbsolute } = require('path')
+
 const execAsync = util.promisify(require('child_process').exec)
+const readFileAsync = util.promisify(readFile)
+
+const axios = Axios.create({
+  method: 'GET',
+  timeout: 6e4, // 60 second timeout
+  responseType: 'text',
+  headers: {
+    accept: 'audio/x-mpegurl',
+  },
+})
+
+axios.interceptors.response.use(
+  response => {
+    const { 'content-type': contentType = '' } = response.headers
+    if (contentType !== 'audio/x-mpegurl') {
+      throw new Error('URL is not an .m3u playlist file')
+    }
+    return response.data
+  },
+  error => {
+    let msg
+    if (error.response) {
+      msg = error.response.data
+    } else {
+      msg = `Error fetching playlist`
+    }
+
+    return Promise.reject(new Error(msg))
+  }
+)
 
 let cache = new Set()
 
@@ -17,6 +53,30 @@ function checkCache({ url }) {
   let id = hashUrl(url)
 
   return cache.has(id)
+}
+
+async function parsePlaylist(input) {
+  if (!isBufferOrString(input)) {
+    throw new TypeError(`Invalid input type: (${typeof input})`)
+  }
+
+  let data = input
+
+  if (Buffer.isBuffer(input)) {
+    data = input.toString(`utf8`)
+  } else if (typeof input === `string`) {
+    if (isWebUri(input)) {
+      data = await axios(input)
+    } else if (isAbsolute(input) && existsSync(input)) {
+      data = await readFileAsync(input, { encoding: `utf8` })
+    }
+  }
+
+  return parse(data)
+}
+
+function isBufferOrString(input) {
+  return typeof input === `string` || Buffer.isBuffer(input)
 }
 
 function parseMessage(reason, { url }) {
@@ -70,8 +130,8 @@ function checkItem(item) {
 
   return execAsync(
     `ffprobe -of json -v error -hide_banner -show_format -show_streams ${
-      userAgent ? `-user_agent "${userAgent}"` : ``
-    } ${url}`,
+      userAgent ? `-user_agent '${userAgent}'` : ``
+    } '${url}'`,
     { timeout }
   )
     .then(({ stdout }) => {
@@ -105,5 +165,6 @@ module.exports = {
   checkCache,
   chunk,
   debugLogger,
+  parsePlaylist,
   validateStatus,
 }
