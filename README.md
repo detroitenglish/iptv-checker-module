@@ -20,13 +20,13 @@ const opts = {
 }
 
 // Example with path to local playlist file
-iptvChecker('./local/playlist.m3u', opts)
+iptvChecker('/home/foo/playlist.m3u', opts)
 
 // Example with playlist URL
 iptvChecker('http://127.0.0.1/example/playlist.m3u', opts)
 
 // Example with playlist data Buffer
-const playlistBuffer = readFileSync('./local/playlist.m3u')
+const playlistBuffer = readFileSync('/home/foo/playlist.m3u')
 iptvChecker(playlistBuffer, opts)
 ```
 
