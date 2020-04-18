@@ -122,6 +122,14 @@ function chunk(arr, size) {
   )
 }
 
+function flatten(arr, depth = 1) {
+  return arr.reduce(
+    (a, v) =>
+      a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v),
+    []
+  )
+}
+
 function checkItem(item) {
   const { url } = item
   const {
@@ -165,6 +173,7 @@ module.exports = {
   checkCache,
   chunk,
   debugLogger,
+  flatten,
   parsePlaylist,
   validateStatus,
 }
