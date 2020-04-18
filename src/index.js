@@ -75,7 +75,7 @@ module.exports = async function (input, opts = {}) {
     results.push(...(await Promise.all(chunk.map(validator))))
   }
 
-  results = results.flat().concat(duplicates)
+  results = helper.flatten(results).concat(duplicates)
 
   if (config.debug) {
     console.timeEnd('Execution time')
