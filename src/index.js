@@ -4,8 +4,6 @@ const { isWebUri } = require('valid-url')
 const procs = require('os').cpus().length - 1
 const commandExists = require('command-exists')
 
-let debugLogger
-
 let stats = {
   total: 0,
   online: 0,
@@ -18,6 +16,7 @@ const defaultConfig = {
   userAgent: null,
   timeout: 1e4,
   parallel: procs || 1,
+  omitMetadata: false,
 }
 
 module.exports = async function (input, opts = {}) {
@@ -31,7 +30,7 @@ module.exports = async function (input, opts = {}) {
 
   const config = { ...defaultConfig, ...opts }
 
-  debugLogger = helper.debugLogger(config)
+  const debugLogger = helper.debugLogger(config)
 
   debugLogger({ config })
 
@@ -87,6 +86,12 @@ module.exports = async function (input, opts = {}) {
     }
     for (let [key, val] of Object.entries(ctx.stats)) {
       debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
+    }
+  }
+
+  if (config.omitMetadata) {
+    for (let result of results) {
+      delete result.status.metadata
     }
   }
 
