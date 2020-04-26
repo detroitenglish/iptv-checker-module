@@ -67,7 +67,7 @@ async function parsePlaylist(input) {
   } else if (typeof input === `string`) {
     if (isWebUri(input)) {
       data = await axios(input)
-    } else if (isAbsolute(input) && existsSync(input)) {
+    } else if (existsSync(input)) {
       data = await readFileAsync(input, { encoding: `utf8` })
     }
   }
