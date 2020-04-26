@@ -3,7 +3,6 @@ const util = require('util')
 const { parse } = require('iptv-playlist-parser')
 const { isWebUri } = require('valid-url')
 const { existsSync, readFile } = require('fs')
-const { isAbsolute } = require('path')
 
 const execAsync = util.promisify(require('child_process').exec)
 const readFileAsync = util.promisify(readFile)
