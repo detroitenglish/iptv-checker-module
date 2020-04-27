@@ -176,6 +176,23 @@ async function validateStatus(item) {
   return item
 }
 
+function statsLogger({ config, stats, debugLogger }) {
+  if (!config.debug) return
+
+  console.timeEnd('Execution time')
+
+  let colors = {
+    total: `white`,
+    online: `green`,
+    offline: `red`,
+    duplicates: `yellow`,
+  }
+
+  for (let [key, val] of Object.entries(stats)) {
+    debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
+  }
+}
+
 module.exports = {
   addToCache,
   checkCache,
@@ -183,5 +200,6 @@ module.exports = {
   debugLogger,
   orderBy,
   parsePlaylist,
+  statsLogger,
   validateStatus,
 }

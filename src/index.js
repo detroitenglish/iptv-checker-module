@@ -1,8 +1,9 @@
 require('colors')
 const helper = require('./helper')
 const { isWebUri } = require('valid-url')
-const procs = require('os').cpus().length - 1
 const commandExists = require('command-exists')
+
+const procs = require('os').cpus().length - 1
 
 let stats = {
   total: 0,
@@ -37,18 +38,21 @@ module.exports = async function (input, opts = {}) {
 
   const debugLogger = helper.debugLogger(config)
 
-  debugLogger({ config })
+  debugLogger(config)
 
   console.time('Execution time')
 
   const items = playlist.items
-    .filter(item => isWebUri(item.url))
     .map(item => {
+      if (!isWebUri(item.url)) return null
+
       if (helper.checkCache(item)) {
         duplicates.push(item)
+
         return null
       } else {
         helper.addToCache(item)
+
         return item
       }
     })
@@ -97,18 +101,7 @@ module.exports = async function (input, opts = {}) {
     }
   }
 
-  if (config.debug) {
-    console.timeEnd('Execution time')
-    let colors = {
-      total: `white`,
-      online: `green`,
-      offline: `red`,
-      duplicates: `yellow`,
-    }
-    for (let [key, val] of Object.entries(ctx.stats)) {
-      debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
-    }
-  }
+  helper.statsLogger(ctx)
 
   return playlist
 }
