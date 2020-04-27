@@ -27,6 +27,10 @@ module.exports = async function (input, opts = {}) {
     )
   })
 
+  const results = []
+
+  const duplicates = []
+
   const playlist = await helper.parsePlaylist(input)
 
   const config = { ...defaultConfig, ...opts }
@@ -36,8 +40,6 @@ module.exports = async function (input, opts = {}) {
   debugLogger({ config })
 
   console.time('Execution time')
-
-  const duplicates = []
 
   const items = playlist.items
     .filter(item => isWebUri(item.url))
@@ -64,25 +66,36 @@ module.exports = async function (input, opts = {}) {
   for (let item of duplicates) {
     item.status = { ok: false, reason: `Duplicate` }
     await config.itemCallback(item)
+    results.push(item)
   }
 
   const ctx = { config, stats, debugLogger }
 
   const validator = helper.validateStatus.bind(ctx)
 
-  let results = []
-
   if (+config.parallel === 1) {
     for (let item of items) {
-      results.push(await validator(item))
+      const checkedItem = await validator(item)
+
+      results.push(checkedItem)
     }
   } else {
-    for (let [...chunk] of helper.chunk(items, +config.parallel)) {
-      results.push(...(await Promise.all(chunk.map(validator))))
+    const chunkedItems = helper.chunk(items, +config.parallel)
+
+    for (let [...chunk] of chunkedItems) {
+      const chunkResults = await Promise.all(chunk.map(validator))
+
+      results.push(...chunkResults)
     }
   }
 
-  results = helper.flatten(results).concat(duplicates)
+  playlist.items = helper.orderBy(results, [`name`])
+
+  if (config.omitMetadata) {
+    for (let item of playlist.items) {
+      delete item.status.metadata
+    }
+  }
 
   if (config.debug) {
     console.timeEnd('Execution time')
@@ -96,14 +109,6 @@ module.exports = async function (input, opts = {}) {
       debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
     }
   }
-
-  if (config.omitMetadata) {
-    for (let result of results) {
-      delete result.status.metadata
-    }
-  }
-
-  playlist.items = results
 
   return playlist
 }
