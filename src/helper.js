@@ -121,11 +121,18 @@ function chunk(arr, size) {
   )
 }
 
-function flatten(arr, depth = 1) {
-  return arr.reduce(
-    (a, v) =>
-      a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v),
-    []
+function orderBy(arr, props, orders) {
+  return [...arr].sort((a, b) =>
+    props.reduce((acc, prop, i) => {
+      if (acc === 0) {
+        const [p1, p2] =
+          orders && orders[i] === 'desc'
+            ? [b[prop], a[prop]]
+            : [a[prop], b[prop]]
+        acc = p1 > p2 ? 1 : p1 < p2 ? -1 : 0
+      }
+      return acc
+    }, 0)
   )
 }
 
@@ -174,7 +181,7 @@ module.exports = {
   checkCache,
   chunk,
   debugLogger,
-  flatten,
+  orderBy,
   parsePlaylist,
   validateStatus,
 }
