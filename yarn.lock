@@ -1403,10 +1403,10 @@ inquirer@^7.0.0:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-iptv-playlist-parser@^0.4.0:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/iptv-playlist-parser/-/iptv-playlist-parser-0.4.1.tgz#aa774b772f662c0d8fab9a61707bcd422b826b39"
-  integrity sha512-Nx+peCwP9B964Bdv7samCC42so8ATam4qE/RI6Ifs5mzvfbOevPv061ZmdSCr6GmZdWXCIV/fpzJfcWO8FrYyQ==
+iptv-playlist-parser@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/iptv-playlist-parser/-/iptv-playlist-parser-0.4.2.tgz#cae613b991b2af3aabfa21175b4427621168b071"
+  integrity sha512-o3JsZF+nrGHtVEPp34WlfG16Gd+0UIV7Mnkk/XTbkBgdkx+I28u+bSMZ0X5HY1CRXrYDtHgJ/4h/+Ijnk29dFA==
 
 irregular-plurals@^3.2.0:
   version "3.2.0"

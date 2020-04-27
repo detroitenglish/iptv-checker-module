@@ -3,7 +3,6 @@ const util = require('util')
 const { parse } = require('iptv-playlist-parser')
 const { isWebUri } = require('valid-url')
 const { existsSync, readFile } = require('fs')
-const { isAbsolute } = require('path')
 
 const execAsync = util.promisify(require('child_process').exec)
 const readFileAsync = util.promisify(readFile)
@@ -67,7 +66,7 @@ async function parsePlaylist(input) {
   } else if (typeof input === `string`) {
     if (isWebUri(input)) {
       data = await axios(input)
-    } else if (isAbsolute(input) && existsSync(input)) {
+    } else if (existsSync(input)) {
       data = await readFileAsync(input, { encoding: `utf8` })
     }
   }
