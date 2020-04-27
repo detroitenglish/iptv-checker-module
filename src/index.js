@@ -17,6 +17,7 @@ const defaultConfig = {
   timeout: 1e4,
   parallel: procs || 1,
   omitMetadata: false,
+  itemCallback: () => {},
 }
 
 module.exports = async function (input, opts = {}) {
@@ -62,6 +63,7 @@ module.exports = async function (input, opts = {}) {
 
   for (let item of duplicates) {
     item.status = { ok: false, reason: `Duplicate` }
+    await config.itemCallback(item)
   }
 
   const ctx = { config, stats, debugLogger }
@@ -70,8 +72,14 @@ module.exports = async function (input, opts = {}) {
 
   let results = []
 
-  for (let [...chunk] of helper.chunk(items, +config.parallel)) {
-    results.push(...(await Promise.all(chunk.map(validator))))
+  if (+config.parallel === 1) {
+    for (let item of items) {
+      results.push(await validator(item))
+    }
+  } else {
+    for (let [...chunk] of helper.chunk(items, +config.parallel)) {
+      results.push(...(await Promise.all(chunk.map(validator))))
+    }
   }
 
   results = helper.flatten(results).concat(duplicates)

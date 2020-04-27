@@ -152,19 +152,21 @@ function checkItem(item) {
 }
 
 async function validateStatus(item) {
-  const status = await checkItem.call(this, item)
+  item.status = await checkItem.call(this, item)
 
-  if (status.ok) {
+  if (item.status.ok) {
     this.stats.online++
     this.debugLogger(`OK: ${item.url}`.green)
   } else {
     this.stats.offline++
     this.debugLogger(
-      `FAILED: ${item.url}`.red + `\n    Reason: ${status.reason}`.yellow
+      `FAILED: ${item.url}`.red + ` (${item.status.reason})`.yellow
     )
   }
 
-  return Object.assign(item, { status })
+  await this.config.itemCallback(item)
+
+  return item
 }
 
 module.exports = {

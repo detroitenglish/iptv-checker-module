@@ -53,9 +53,10 @@ It will attempt to connect to each item's (i.e. channel's) URL, and adds a `stat
 - `userAgent`: User-Agent string to use when connecting to IPTV channel URLs (default: `undefined`)
 - `debug`: Print additional progress and result information to the console (default: `false`)
 - `omitMetadata`: Omit the `metadata` field from the `status` object of successful connections (default: `false`)
+- `itemCallback`: Function to run after checking a channel, with the channel's `item` object as parameter (default: `(item) => {}` )
 
 ```javascript
-const iptvChecker = require("iptv-checker-module")
+const iptvChecker = require('iptv-checker-module')
 
 const options = {
   timeout: 5e3,
@@ -63,10 +64,14 @@ const options = {
   userAgent: 'Mozilla/5.0 (compatible; Silly-Fetcher like kek) ROFLcopters',
   debug: true,
   omitMetadata: true,
+  itemCallback: item => {
+    console.log(item.url, item.status.ok)
+  },
 }
 
-iptvChecker('./local/playlist.m3u', options)
-  .then(checkedPlaylist => /* ip-tv-playlist Object */)
+iptvChecker('./local/playlist.m3u', options).then(checkedPlaylist => {
+  /*  results Object */
+})
 ```
 
 ### Output
