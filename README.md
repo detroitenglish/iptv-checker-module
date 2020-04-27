@@ -38,8 +38,8 @@ iptvChecker(input, [(options = {})])
 
 This module exports a single **asyncronous** function for parsing one of the following inputs:
 
-1. An **absolute** path to a local `.m3u` playlist (_String_)
-2. A URL of an `.m3u` playlist (_String_)
+1. Path to a local `.m3u` playlist file (_String_)
+2. URL of an `.m3u` playlist (_String_)
 3. `.m3u` file data (_String_ or _Buffer_)
 
 ...using the [iptv-playlist-parser](https://www.npmjs.com/package/iptv-playlist-parser) package.
