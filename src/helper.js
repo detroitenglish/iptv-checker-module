@@ -55,9 +55,7 @@ function checkCache({ url }) {
 }
 
 async function parsePlaylist(input) {
-  if (!isBufferOrString(input)) {
-    throw new TypeError(`Invalid input type: (${typeof input})`)
-  }
+  if (input instanceof Object) return input
 
   let data = input
 
@@ -72,10 +70,6 @@ async function parsePlaylist(input) {
   }
 
   return parse(data)
-}
-
-function isBufferOrString(input) {
-  return typeof input === `string` || Buffer.isBuffer(input)
 }
 
 function parseMessage(reason, { url }) {
