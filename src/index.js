@@ -18,7 +18,8 @@ const defaultConfig = {
   timeout: 1e4,
   parallel: procs || 1,
   omitMetadata: false,
-  itemCallback: () => {},
+  preCheckAction: parsedPlaylist => {}, // eslint-disable-line
+  itemCallback: item => {}, // eslint-disable-line
 }
 
 module.exports = async function (input, opts = {}) {
@@ -32,9 +33,9 @@ module.exports = async function (input, opts = {}) {
 
   const duplicates = []
 
-  const playlist = await helper.parsePlaylist(input)
-
   const config = { ...defaultConfig, ...opts }
+
+  const playlist = await helper.parsePlaylist(input)
 
   const debugLogger = helper.debugLogger(config)
 
@@ -57,6 +58,11 @@ module.exports = async function (input, opts = {}) {
       }
     })
     .filter(Boolean)
+
+  await config.preCheckAction.call(null, {
+    ...playlist,
+    items: [...items, ...duplicates],
+  })
 
   stats.total = items.length + duplicates.length
 
