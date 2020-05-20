@@ -165,7 +165,7 @@ async function validateStatus(item) {
     )
   }
 
-  await this.config.itemCallback(item)
+  await this.config.itemCallback.call(null, item)
 
   return item
 }
