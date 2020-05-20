@@ -4,4 +4,4 @@ output
 .vscode
 auth
 tmp
-package-lock.json
+yarn.lock
