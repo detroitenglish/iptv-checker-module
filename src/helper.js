@@ -55,7 +55,7 @@ function checkCache({ url }) {
 }
 
 async function parsePlaylist(input) {
-  if (input instanceof Object) return input
+  if (input instanceof Object && Reflect.has(input, `items`)) return input
 
   let data = input
 
