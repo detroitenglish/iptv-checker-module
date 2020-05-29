@@ -38,8 +38,8 @@ iptvChecker(input, [(options = {})])
 
 This module exports a single **asyncronous** function for parsing one of the following inputs:
 
-1. An **absolute** path to a local `.m3u` playlist (_String_)
-2. A URL of an `.m3u` playlist (_String_)
+1. Path to a local `.m3u` playlist file (_String_)
+2. URL of an `.m3u` playlist (_String_)
 3. `.m3u` file data (_String_ or _Buffer_)
 
 ...using the [iptv-playlist-parser](https://www.npmjs.com/package/iptv-playlist-parser) package.
@@ -53,9 +53,11 @@ It will attempt to connect to each item's (i.e. channel's) URL, and adds a `stat
 - `userAgent`: User-Agent string to use when connecting to IPTV channel URLs (default: `undefined`)
 - `debug`: Print additional progress and result information to the console (default: `false`)
 - `omitMetadata`: Omit the `metadata` field from the `status` object of successful connections (default: `false`)
+- `preCheckAction`: Function to run after parsing the playlist and before checking channels, with the list's `iptv-playlist-parser` object as parameter (default: `(parsedPlaylist) => {}` )
+- `itemCallback`: Function to run after checking a channel, with the channel's `item` object as parameter (default: `(item) => {}` )
 
 ```javascript
-const iptvChecker = require("iptv-checker-module")
+const iptvChecker = require('iptv-checker-module')
 
 const options = {
   timeout: 5e3,
@@ -63,10 +65,17 @@ const options = {
   userAgent: 'Mozilla/5.0 (compatible; Silly-Fetcher like kek) ROFLcopters',
   debug: true,
   omitMetadata: true,
+  preCheckAction: playlist => {
+    console.log('Total channels to check:', playlist.items.length)
+  },
+  itemCallback: item => {
+    console.log(item.url, item.status.ok)
+  },
 }
 
-iptvChecker('./local/playlist.m3u', options)
-  .then(checkedPlaylist => /* ip-tv-playlist Object */)
+iptvChecker('./local/playlist.m3u', options).then(checkedPlaylist => {
+  /*  results Object */
+})
 ```
 
 ### Output

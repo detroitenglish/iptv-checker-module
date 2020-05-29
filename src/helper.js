@@ -55,9 +55,7 @@ function checkCache({ url }) {
 }
 
 async function parsePlaylist(input) {
-  if (!isBufferOrString(input)) {
-    throw new TypeError(`Invalid input type: (${typeof input})`)
-  }
+  if (input instanceof Object && Reflect.has(input, `items`)) return input
 
   let data = input
 
@@ -72,10 +70,6 @@ async function parsePlaylist(input) {
   }
 
   return parse(data)
-}
-
-function isBufferOrString(input) {
-  return typeof input === `string` || Buffer.isBuffer(input)
 }
 
 function parseMessage(reason, { url }) {
@@ -121,11 +115,18 @@ function chunk(arr, size) {
   )
 }
 
-function flatten(arr, depth = 1) {
-  return arr.reduce(
-    (a, v) =>
-      a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v),
-    []
+function orderBy(arr, props, orders) {
+  return [...arr].sort((a, b) =>
+    props.reduce((acc, prop, i) => {
+      if (acc === 0) {
+        const [p1, p2] =
+          orders && orders[i] === 'desc'
+            ? [b[prop], a[prop]]
+            : [a[prop], b[prop]]
+        acc = p1 > p2 ? 1 : p1 < p2 ? -1 : 0
+      }
+      return acc
+    }, 0)
   )
 }
 
@@ -152,19 +153,38 @@ function checkItem(item) {
 }
 
 async function validateStatus(item) {
-  const status = await checkItem.call(this, item)
+  item.status = await checkItem.call(this, item)
 
-  if (status.ok) {
+  if (item.status.ok) {
     this.stats.online++
     this.debugLogger(`OK: ${item.url}`.green)
   } else {
     this.stats.offline++
     this.debugLogger(
-      `FAILED: ${item.url}`.red + `\n    Reason: ${status.reason}`.yellow
+      `FAILED: ${item.url}`.red + ` (${item.status.reason})`.yellow
     )
   }
 
-  return Object.assign(item, { status })
+  await this.config.itemCallback.call(null, item)
+
+  return item
+}
+
+function statsLogger({ config, stats, debugLogger }) {
+  if (!config.debug) return
+
+  console.timeEnd('Execution time')
+
+  let colors = {
+    total: `white`,
+    online: `green`,
+    offline: `red`,
+    duplicates: `yellow`,
+  }
+
+  for (let [key, val] of Object.entries(stats)) {
+    debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
+  }
 }
 
 module.exports = {
@@ -172,7 +192,8 @@ module.exports = {
   checkCache,
   chunk,
   debugLogger,
-  flatten,
+  orderBy,
   parsePlaylist,
+  statsLogger,
   validateStatus,
 }

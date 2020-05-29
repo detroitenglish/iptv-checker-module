@@ -1,8 +1,9 @@
 require('colors')
 const helper = require('./helper')
 const { isWebUri } = require('valid-url')
-const procs = require('os').cpus().length - 1
 const commandExists = require('command-exists')
+
+const procs = require('os').cpus().length - 1
 
 let stats = {
   total: 0,
@@ -17,6 +18,8 @@ const defaultConfig = {
   timeout: 1e4,
   parallel: procs || 1,
   omitMetadata: false,
+  preCheckAction: parsedPlaylist => {}, // eslint-disable-line
+  itemCallback: item => {}, // eslint-disable-line
 }
 
 module.exports = async function (input, opts = {}) {
@@ -26,28 +29,38 @@ module.exports = async function (input, opts = {}) {
     )
   })
 
-  const playlist = await helper.parsePlaylist(input)
-
-  const config = { ...defaultConfig, ...opts }
-
-  const debugLogger = helper.debugLogger(config)
-
-  debugLogger({ config })
+  const results = []
 
   const duplicates = []
 
+  const config = { ...defaultConfig, ...opts }
+
+  const playlist = await helper.parsePlaylist(input)
+
+  const debugLogger = helper.debugLogger(config)
+
+  debugLogger(config)
+
   const items = playlist.items
-    .filter(item => isWebUri(item.url))
     .map(item => {
+      if (!isWebUri(item.url)) return null
+
       if (helper.checkCache(item)) {
         duplicates.push(item)
+
         return null
       } else {
         helper.addToCache(item)
+
         return item
       }
     })
     .filter(Boolean)
+
+  await config.preCheckAction.call(null, {
+    ...playlist,
+    items: [...items, ...duplicates],
+  })
 
   stats.total = items.length + duplicates.length
 
@@ -60,39 +73,38 @@ module.exports = async function (input, opts = {}) {
 
   for (let item of duplicates) {
     item.status = { ok: false, reason: `Duplicate` }
+    await config.itemCallback(item)
+    results.push(item)
   }
 
   const ctx = { config, stats, debugLogger }
 
   const validator = helper.validateStatus.bind(ctx)
 
-  let results = []
+  if (+config.parallel === 1) {
+    for (let item of items) {
+      const checkedItem = await validator(item)
 
-  for (let [...chunk] of helper.chunk(items, +config.parallel)) {
-    results.push(...(await Promise.all(chunk.map(validator))))
-  }
-
-  results = helper.flatten(results).concat(duplicates)
-
-  if (config.debug) {
-    let colors = {
-      total: `white`,
-      online: `green`,
-      offline: `red`,
-      duplicates: `yellow`,
+      results.push(checkedItem)
     }
-    for (let [key, val] of Object.entries(ctx.stats)) {
-      debugLogger(`${key.toUpperCase()}: ${val}`[colors[key]])
+  } else {
+    const chunkedItems = helper.chunk(items, +config.parallel)
+
+    for (let [...chunk] of chunkedItems) {
+      const chunkResults = await Promise.all(chunk.map(validator))
+      results.push(...chunkResults)
     }
   }
+
+  playlist.items = helper.orderBy(results, [`name`])
 
   if (config.omitMetadata) {
-    for (let result of results) {
-      delete result.status.metadata
+    for (let item of playlist.items) {
+      delete item.status.metadata
     }
   }
 
-  playlist.items = results
+  helper.statsLogger(ctx)
 
   return playlist
 }
