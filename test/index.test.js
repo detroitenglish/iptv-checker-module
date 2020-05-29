@@ -18,7 +18,7 @@ function resultTester(result) {
 }
 
 test.serial(`Should process a playlist URL`, async t => {
-  const url = 'https://iptv-org.github.io/iptv/categories/classic.m3u'
+  const url = 'https://iptv-org.github.io/iptv/categories/auto.m3u'
   const results = await iptvChecker(url, { timeout: 2e3, parallel: 1 })
 
   t.true(resultTester(results))
