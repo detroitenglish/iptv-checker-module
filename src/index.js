@@ -34,8 +34,6 @@ module.exports = async function (input, opts = {}) {
 
   debugLogger({ config })
 
-  console.time('Execution time')
-
   const duplicates = []
 
   const items = playlist.items
@@ -77,7 +75,6 @@ module.exports = async function (input, opts = {}) {
   results = helper.flatten(results).concat(duplicates)
 
   if (config.debug) {
-    console.timeEnd('Execution time')
     let colors = {
       total: `white`,
       online: `green`,
