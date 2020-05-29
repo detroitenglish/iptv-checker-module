@@ -24,7 +24,7 @@ test.serial(`Should process a playlist URL`, async t => {
   t.true(resultTester(results))
 })
 
-test.only(`Should process a playlist absolute path`, async t => {
+test.serial(`Should process a playlist absolute path`, async t => {
   const path = 'test/input/dummy.m3u'
   const results = await iptvChecker(path, { timeout: 2e3, parallel: 1 })
 
