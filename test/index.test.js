@@ -24,14 +24,14 @@ test.serial(`Should process a playlist URL`, async t => {
   t.true(resultTester(results))
 })
 
-test.serial(`Should process a playlist absolute path`, async t => {
+test.serial(`Should process a relative playlist file path`, async t => {
   const path = 'test/input/dummy.m3u'
   const results = await iptvChecker(path, { timeout: 2e3, parallel: 1 })
 
   t.true(resultTester(results))
 })
 
-test.serial(`Should process a playlist file path`, async t => {
+test.serial(`Should process an absolute playlist file path`, async t => {
   const results = await iptvChecker(playlistPath, { timeout: 2e3, parallel: 1 })
 
   t.true(resultTester(results))
