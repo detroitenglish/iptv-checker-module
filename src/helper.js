@@ -131,17 +131,41 @@ function orderBy(arr, props, orders) {
 }
 
 function checkItem(item) {
-  const { url } = item
-  const {
-    config: { userAgent, timeout },
+  const { url, http = {} } = item
+  let { referrer, 'user-agent': itemUserAgent } = http
+  let {
+    config: { userAgent, timeout, useItemHttpHeaders },
+    debugLogger,
   } = this
 
-  return execAsync(
-    `ffprobe -of json -v error -hide_banner -show_format -show_streams ${
-      userAgent ? `-user_agent '${userAgent}'` : ``
-    } '${url}'`,
-    { timeout }
-  )
+  let args = [
+    `ffprobe`,
+    `-of json`,
+    `-v error`,
+    `-hide_banner`,
+    `-show_format`,
+    `-show_streams`,
+  ]
+
+  /* ! Single-quote wrap all user input to prevent shell injection attacks */
+  if (useItemHttpHeaders) {
+    userAgent = itemUserAgent || userAgent
+    if (referrer) {
+      args.push(`-headers`, `'Referer: ${referrer}'`)
+    }
+  }
+
+  if (userAgent) {
+    args.push(`-user_agent`, `'${userAgent}'`)
+  }
+
+  args.push(`'${url}'`)
+
+  args = args.join(` `)
+
+  debugLogger(`EXECUTING: "${args}"`)
+
+  return execAsync(args, { timeout })
     .then(({ stdout }) => {
       if (!isJSON(stdout)) {
         return { ok: false, reason: parseMessage(stdout, item) }
