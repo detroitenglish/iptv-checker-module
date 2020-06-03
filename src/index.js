@@ -41,8 +41,6 @@ module.exports = async function (input, opts = {}) {
 
   debugLogger(config)
 
-  console.time('Execution time')
-
   const items = playlist.items
     .map(item => {
       if (!isWebUri(item.url)) return null
@@ -94,7 +92,6 @@ module.exports = async function (input, opts = {}) {
 
     for (let [...chunk] of chunkedItems) {
       const chunkResults = await Promise.all(chunk.map(validator))
-
       results.push(...chunkResults)
     }
   }
