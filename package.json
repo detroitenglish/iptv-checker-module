@@ -1,6 +1,6 @@
 {
   "name": "iptv-checker-module",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "Check the status of IPTV channels in an .m3u playlist file",
   "main": "src/index.js",
   "files": [
