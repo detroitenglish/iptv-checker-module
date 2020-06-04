@@ -18,6 +18,7 @@ const defaultConfig = {
   timeout: 1e4,
   parallel: procs || 1,
   omitMetadata: false,
+  useItemHttpHeaders: true,
   preCheckAction: parsedPlaylist => {}, // eslint-disable-line
   itemCallback: item => {}, // eslint-disable-line
 }

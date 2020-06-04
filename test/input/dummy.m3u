@@ -17,6 +17,7 @@ https://content.uplynk.com/channel/4ee18bd581dc4d3b90303e0cb9beeb0f.m3u8
 https://content.uplynk.com/channel/4ee18bd581dc4d3b90303e0cb9beeb0f.m3u8
 
 #EXTINF:-1,online
+#EXTVLCOPT:http-referrer=http://example.com/
 http://c13-ply.janus.cl/playlist/stream.m3u8?s=c13hd
 
 

@@ -1,4 +1,5 @@
 const Axios = require('axios')
+const { customAlphabet } = require('nanoid')
 const util = require('util')
 const { parse } = require('iptv-playlist-parser')
 const { isWebUri } = require('valid-url')
@@ -6,6 +7,11 @@ const { existsSync, readFile } = require('fs')
 
 const execAsync = util.promisify(require('child_process').exec)
 const readFileAsync = util.promisify(readFile)
+
+const nanoid = customAlphabet(
+  '1234567890abcdefghijklmnopqrstuvwxyz'.toUpperCase(),
+  6
+)
 
 const axios = Axios.create({
   method: 'GET',
@@ -131,17 +137,41 @@ function orderBy(arr, props, orders) {
 }
 
 function checkItem(item) {
-  const { url } = item
-  const {
-    config: { userAgent, timeout },
+  const { url, http = {} } = item
+  let { referrer = ``, 'user-agent': itemUserAgent = `` } = http
+  let {
+    config: { userAgent, timeout, useItemHttpHeaders },
+    debugLogger,
   } = this
 
-  return execAsync(
-    `ffprobe -of json -v error -hide_banner -show_format -show_streams ${
-      userAgent ? `-user_agent '${userAgent}'` : ``
-    } '${url}'`,
-    { timeout }
-  )
+  let args = [
+    `ffprobe`,
+    `-of json`,
+    `-v error`,
+    `-hide_banner`,
+    `-show_format`,
+    `-show_streams`,
+  ]
+
+  /* ! Single-quote wrap all user input to prevent shell injection attacks */
+  if (useItemHttpHeaders) {
+    userAgent = itemUserAgent.length ? itemUserAgent : userAgent
+    if (referrer.length) {
+      args.push(`-headers`, `'Referer: ${referrer}'`)
+    }
+  }
+
+  if (userAgent) {
+    args.push(`-user_agent`, `'${userAgent}'`)
+  }
+
+  args.push(`'${url}'`)
+
+  args = args.join(` `)
+
+  debugLogger(`[${item.uid}] EXECUTING: "${args}"`)
+
+  return execAsync(args, { timeout })
     .then(({ stdout }) => {
       if (!isJSON(stdout)) {
         return { ok: false, reason: parseMessage(stdout, item) }
@@ -153,17 +183,22 @@ function checkItem(item) {
 }
 
 async function validateStatus(item) {
+  if (this.config.debug) item.uid = nanoid()
+
   item.status = await checkItem.call(this, item)
 
   if (item.status.ok) {
     this.stats.online++
-    this.debugLogger(`OK: ${item.url}`.green)
+    this.debugLogger(`[${item.uid}] OK: ${item.url}`.green)
   } else {
     this.stats.offline++
     this.debugLogger(
-      `FAILED: ${item.url}`.red + ` (${item.status.reason})`.yellow
+      `[${item.uid}] FAILED: ${item.url}`.red +
+        ` (${item.status.reason})`.yellow
     )
   }
+
+  delete item.uid
 
   await this.config.itemCallback.call(null, item)
 
@@ -172,8 +207,6 @@ async function validateStatus(item) {
 
 function statsLogger({ config, stats, debugLogger }) {
   if (!config.debug) return
-
-  console.timeEnd('Execution time')
 
   let colors = {
     total: `white`,

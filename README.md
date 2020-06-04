@@ -53,6 +53,7 @@ It will attempt to connect to each item's (i.e. channel's) URL, and adds a `stat
 - `userAgent`: User-Agent string to use when connecting to IPTV channel URLs (default: `undefined`)
 - `debug`: Print additional progress and result information to the console (default: `false`)
 - `omitMetadata`: Omit the `metadata` field from the `status` object of successful connections (default: `false`)
+- `useItemHttpHeaders`: If defined, use a channel's custom `Referer` and/or `User-Agent` headers. Note that channel-specific user-agents will override the `userAgent` option (default: `true`)
 - `preCheckAction`: Function to run after parsing the playlist and before checking channels, with the list's `iptv-playlist-parser` object as parameter (default: `(parsedPlaylist) => {}` )
 - `itemCallback`: Function to run after checking a channel, with the channel's `item` object as parameter (default: `(item) => {}` )
 
@@ -65,6 +66,7 @@ const options = {
   userAgent: 'Mozilla/5.0 (compatible; Silly-Fetcher like kek) ROFLcopters',
   debug: true,
   omitMetadata: true,
+  useItemHttpHeaders: true,
   preCheckAction: playlist => {
     console.log('Total channels to check:', playlist.items.length)
   },
