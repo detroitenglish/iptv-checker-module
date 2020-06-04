@@ -138,7 +138,7 @@ function orderBy(arr, props, orders) {
 
 function checkItem(item) {
   const { url, http = {} } = item
-  let { referrer, 'user-agent': itemUserAgent } = http
+  let { referrer = ``, 'user-agent': itemUserAgent = `` } = http
   let {
     config: { userAgent, timeout, useItemHttpHeaders },
     debugLogger,
@@ -155,8 +155,8 @@ function checkItem(item) {
 
   /* ! Single-quote wrap all user input to prevent shell injection attacks */
   if (useItemHttpHeaders) {
-    userAgent = itemUserAgent || userAgent
-    if (referrer) {
+    userAgent = itemUserAgent.length ? itemUserAgent : userAgent
+    if (referrer.length) {
       args.push(`-headers`, `'Referer: ${referrer}'`)
     }
   }
