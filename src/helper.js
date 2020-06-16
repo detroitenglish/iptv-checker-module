@@ -17,15 +17,12 @@ const axios = Axios.create({
   method: 'GET',
   timeout: 6e4, // 60 second timeout
   responseType: 'text',
-  headers: {
-    accept: 'audio/x-mpegurl',
-  },
 })
 
 axios.interceptors.response.use(
   response => {
     const { 'content-type': contentType = '' } = response.headers
-    if (contentType !== 'audio/x-mpegurl') {
+    if (!/mpegurl/.test(contentType)) {
       throw new Error('URL is not an .m3u playlist file')
     }
     return response.data
