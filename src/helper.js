@@ -173,8 +173,6 @@ async function validateStatus(item) {
 function statsLogger({ config, stats, debugLogger }) {
   if (!config.debug) return
 
-  console.timeEnd('Execution time')
-
   let colors = {
     total: `white`,
     online: `green`,
